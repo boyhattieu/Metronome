@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frag_metronome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/frag_metronome">
+    tools:context=".ui.frags.MetronomeFrag">
+
 
     <ImageView
         android:id="@+id/btn_setting"
@@ -32,7 +35,6 @@
         android:layout_height="170dp"
         android:layout_centerInParent="true"
         android:alpha="0" />
-
 
 
 </RelativeLayout>
