@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/frag_metronome">
+
+    <ImageView
+        android:id="@+id/btn_setting"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20dp"
+        android:adjustViewBounds="true" />
+
+    <ImageView
+        android:id="@+id/rotate_cd"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/btn_play"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_centerInParent="true"
+        android:alpha="1" />
+
+    <ImageView
+        android:id="@+id/btn_pause"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_centerInParent="true"
+        android:alpha="0" />
+
+
+
+</RelativeLayout>

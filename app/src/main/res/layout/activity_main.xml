@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.activities.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/rlt_logotop"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@drawable/bg_black_bamboo">
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/logo_panda_company" />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="46dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/txt_metronome_2" />
+
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpg_main"
+        android:layout_width="match_parent"
+        android:layout_above="@id/ln_tab"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlt_logotop" />
+
+    <LinearLayout
+        android:id="@+id/ln_tab"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:background="@drawable/bg_black_bamboo_bottom"/>
+
+
+</RelativeLayout>
