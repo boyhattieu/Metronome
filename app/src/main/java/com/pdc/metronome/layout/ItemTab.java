@@ -53,6 +53,9 @@ public class ItemTab  extends LinearLayout {
         addView(imgTab);
         addView(txtTab);
 
+        txtTab.setTextColor(Color.GRAY);
+        imgTab.setColorFilter(Color.GRAY);
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
