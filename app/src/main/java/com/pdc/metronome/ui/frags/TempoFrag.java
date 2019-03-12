@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.pdc.metronome.R;
 
 public class TempoFrag extends Fragment {
@@ -24,7 +25,17 @@ public class TempoFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.frag_tempo, container, false);
         initView();
+        onListeners();
         return rootView;
+    }
+
+    private void onListeners() {
+        imgTap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewAnimator.animate(imgTap).scale(1f, 0.8f, 1f).duration(100).start();
+            }
+        });
     }
 
     private void initView() {

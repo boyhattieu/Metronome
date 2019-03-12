@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.pdc.metronome.R;
 
 public class MetronomeFrag extends Fragment {
@@ -41,7 +42,7 @@ public class MetronomeFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 isStart = !isStart;
-                buttonEffect(btnPlay);
+                ViewAnimator.animate(btnPlay).scale(1f, 0.9f, 1f).duration(100).start();
                 if (isStart) {
                     Glide.with(getContext()).load(R.drawable.btn_wooden_cd_play).into(btnPlay);
                 } else {
@@ -88,24 +89,5 @@ public class MetronomeFrag extends Fragment {
         Glide.with(getContext()).load(R.drawable.btn_minus).into(btnMinus);
     }
 
-    public static void buttonEffect(View button){
-        button.setOnTouchListener(new View.OnTouchListener() {
 
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        v.getBackground().setColorFilter(0xe0f47521,PorterDuff.Mode.SRC_ATOP);
-                        v.invalidate();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        v.getBackground().clearColorFilter();
-                        v.invalidate();
-                        break;
-                    }
-                }
-                return false;
-            }
-        });
-    }
 }
