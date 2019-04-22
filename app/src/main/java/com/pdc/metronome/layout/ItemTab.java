@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.pdc.metronome.R;
 
 public class ItemTab  extends LinearLayout {
@@ -44,6 +45,7 @@ public class ItemTab  extends LinearLayout {
         LayoutParams layoutParams = new LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         setLayoutParams(layoutParams);
         setGravity(Gravity.CENTER);
+
         imgTab = new ImageView(getContext());
         txtTab = new TextView(getContext());
         setOrientation(VERTICAL);
@@ -65,7 +67,7 @@ public class ItemTab  extends LinearLayout {
     }
 
     private void setContainer(int res, String text) {
-        imgTab.setImageResource(res);
+        Glide.with(getContext()).load(res).into(imgTab);
         txtTab.setText(text);
         imgTab.setLayoutParams(paramsImg);
         txtTab.setLayoutParams(paramsTxt);

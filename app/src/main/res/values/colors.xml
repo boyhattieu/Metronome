@@ -5,4 +5,10 @@
     <color name="colorAccent">#D81B60</color>
     <color name="tab_color">#754123</color>
     <color name="tempo_txt_tap">#c3c3c3</color>
+    <color name="color_beat_choosen">#bc7906</color>
+    <color name="bg">#754123</color>
+    <color name="txt_all">#754123</color>
+    <color name="bg_beat">#000000</color>
+    <color name="stroke_beat">#1cf91e</color>
+    <color name="txt_beat">#ffffff</color>
 </resources>

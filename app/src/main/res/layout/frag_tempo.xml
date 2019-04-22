@@ -10,47 +10,62 @@
         android:scaleType="centerCrop" />
 
     <ImageView
-        android:id="@+id/rotate_cd"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_above="@id/img_tap"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp" />
-
-    <ImageView
-        android:id="@+id/img_tap"
-        android:layout_width="match_parent"
+        android:id="@+id/img_tap_outside"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
         android:adjustViewBounds="true" />
 
     <ImageView
-        android:id="@+id/img_tap_bg"
+        android:id="@+id/img_tap_inside"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="33dp"
+        android:adjustViewBounds="true" />
+
+    <ImageView
+        android:id="@+id/img_tempo"
         android:layout_width="152dp"
         android:layout_height="152dp"
-        android:layout_alignBottom="@id/rotate_cd"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp" />
+        android:layout_above="@id/img_tap_outside"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="54dp" />
 
     <TextView
-        android:id="@+id/txt_tap"
+        android:id="@+id/txt_tempo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/img_tap_bg"
+        android:layout_alignBottom="@id/img_tempo"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
-        android:textColor="@color/tempo_txt_tap"
+        android:textColor="@color/txt_all"
         android:textSize="34sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/img_tap_bg"
+        android:layout_alignTop="@id/img_tempo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="@string/tempo_txt_tempo"
-        android:textColor="@color/tempo_txt_tap" />
+        android:textColor="@color/txt_all"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt_tap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/img_tap_outside"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="@string/txt_tap"
+        android:textColor="@color/txt_all"
+        android:textSize="@dimen/txt_tap"
+        android:textStyle="bold" />
 
 </RelativeLayout>

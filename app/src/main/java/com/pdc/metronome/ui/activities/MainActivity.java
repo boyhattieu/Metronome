@@ -1,13 +1,17 @@
 package com.pdc.metronome.ui.activities;
 
+import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.pdc.metronome.R;
 import com.pdc.metronome.adapter.viewpager.PagerAdapter;
 import com.pdc.metronome.layout.ItemTab;
@@ -22,8 +26,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private List<Fragment> fragments;
-    private ViewPager viewPagerMain;
+    private com.pdc.metronome.adapter.viewpager.ViewPager viewPagerMain;
     private LinearLayout lnTabMain;
+    private ImageView imgAppLogo;
+    private ImageView imgCompanyLogo;
+    private ImageView topBackground;
 
     private List<ItemTab> itemTabs;
 
@@ -34,16 +41,27 @@ public class MainActivity extends AppCompatActivity {
         viewPagerMain = findViewById(R.id.vpg_main);
         lnTabMain = findViewById(R.id.ln_tab);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
+        initView();
         initTab();
         initFrag();
         initViewPager();
         registerListener();
     }
 
+    private void initView() {
+        imgAppLogo = findViewById(R.id.img_app_logo);
+        imgCompanyLogo = findViewById(R.id.img_company_logo);
+        topBackground = findViewById(R.id.top_bg);
+
+        Glide.with(this).load(R.drawable.bg_black_bamboo).into(topBackground);
+        Glide.with(this).load(R.drawable.txt_metronome_2).into(imgAppLogo);
+        Glide.with(this).load(R.drawable.logo_panda_company).into(imgCompanyLogo);
+    }
+
     private void registerListener() {
-        viewPagerMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPagerMain.addOnPageChangeListener(new com.pdc.metronome.adapter.viewpager.ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -69,22 +87,22 @@ public class MainActivity extends AppCompatActivity {
     private void initFrag() {
         fragments = new ArrayList<>();
         fragments.add(new MetronomeFrag());
-        fragments.add(new TempoFrag());
         fragments.add(new BeatFrag());
-        fragments.add(new LibraryFrag());
+//        fragments.add(new TempoFrag());
+//        fragments.add(new LibraryFrag());
     }
 
     private void initTab() {
-        int width = WidthScreen()/4;
+        int width = WidthScreen() / 2;
         itemTabs = new ArrayList<>();
         itemTabs.add(new ItemTab(this, R.drawable.ic_metronome, "Metronome", width, 0));
-        itemTabs.add(new ItemTab(this, R.drawable.ic_tempo, "Tempo", width, 1));
-        itemTabs.add(new ItemTab(this, R.drawable.ic_beat, "Beat", width, 2));
-        itemTabs.add(new ItemTab(this, R.drawable.ic_library, "Library", width, 3));
+        itemTabs.add(new ItemTab(this, R.drawable.ic_beat, "Beat", width, 1));
+//        itemTabs.add(new ItemTab(this, R.drawable.ic_tempo, "Tempo", width, 1));
+//        itemTabs.add(new ItemTab(this, R.drawable.ic_library, "Library", width, 3));
 
         itemTabs.get(0).selected(true);
         lnTabMain.setWeightSum(itemTabs.size());
-        for (int i = 0; i< itemTabs.size(); i++){
+        for (int i = 0; i < itemTabs.size(); i++) {
             final ItemTab itemTab = itemTabs.get(i);
             itemTab.setOnClickItem(new ItemTab.IOnClickItem() {
                 @Override
@@ -97,15 +115,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int WidthScreen(){
+    private int WidthScreen() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         return width;
     }
 
-    private void onSelectedTab(int position){
-        for (int i =0; i<itemTabs.size(); i++){
+    private void onSelectedTab(int position) {
+        for (int i = 0; i < itemTabs.size(); i++) {
             itemTabs.get(i).selected(false);
         }
         itemTabs.get(position).selected(true);

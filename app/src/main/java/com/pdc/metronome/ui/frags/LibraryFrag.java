@@ -27,6 +27,6 @@ public class LibraryFrag extends Fragment {
 
     private void initView() {
         imgBackground = rootView.findViewById(R.id.img_bg);
-        Glide.with(getContext()).load(R.drawable.bg_wooden_3).into(imgBackground);
+        Glide.with(getContext()).load(R.drawable.bg).into(imgBackground);
     }
 }

@@ -9,9 +9,11 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_beat"
+    <LinearLayout
+        android:id="@+id/ln_beat"
+        android:gravity="center"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

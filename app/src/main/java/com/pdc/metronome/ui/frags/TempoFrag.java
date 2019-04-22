@@ -16,7 +16,11 @@ import com.pdc.metronome.R;
 
 public class TempoFrag extends Fragment {
 
-    private ImageView imgBackground, imgTap, imgRotate, imgTapBG;
+    private ImageView imgBackground;
+    private ImageView imgTapOutside;
+    private ImageView imgTapInside;
+    private ImageView imgTapBG;
+    private TextView txtTempo;
     private TextView txtTap;
     private View rootView;
 
@@ -30,26 +34,28 @@ public class TempoFrag extends Fragment {
     }
 
     private void onListeners() {
-        imgTap.setOnClickListener(new View.OnClickListener() {
+        imgTapInside.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewAnimator.animate(imgTap).scale(1f, 0.8f, 1f).duration(100).start();
+                ViewAnimator.animate(imgTapInside).scale(1f, 0.8f, 1f).duration(100).start();
+                ViewAnimator.animate(txtTap).scale(1f, 0.8f, 1f).duration(100).start();
             }
         });
     }
 
     private void initView() {
         imgBackground = rootView.findViewById(R.id.img_bg);
-        imgTap = rootView.findViewById(R.id.img_tap);
-        imgRotate = rootView.findViewById(R.id.rotate_cd);
-        imgTapBG = rootView.findViewById(R.id.img_tap_bg);
+        imgTapOutside = rootView.findViewById(R.id.img_tap_outside);
+        imgTapInside = rootView.findViewById(R.id.img_tap_inside);
+        imgTapBG = rootView.findViewById(R.id.img_tempo);
+        txtTempo = rootView.findViewById(R.id.txt_tempo);
         txtTap = rootView.findViewById(R.id.txt_tap);
 
-        Glide.with(getContext()).load(R.drawable.bg_wooden_3).into(imgBackground);
-        Glide.with(getContext()).load(R.drawable.btn_tap).into(imgTap);
-        Glide.with(getContext()).load(R.drawable.bg_wooden_cd).into(imgRotate);
-        Glide.with(getContext()).load(R.drawable.img_round_tap).into(imgTapBG);
+        Glide.with(getContext()).load(R.drawable.bg_1).into(imgBackground);
+        Glide.with(getContext()).load(R.drawable.bg_tempo).into(imgTapBG);
+        Glide.with(getContext()).load(R.drawable.black_round_tap_outside).into(imgTapOutside);
+        Glide.with(getContext()).load(R.drawable.black_round_tap_inside).into(imgTapInside);
 
-        txtTap.setText("128");
+        txtTempo.setText("128");
     }
 }

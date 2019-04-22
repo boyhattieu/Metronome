@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Metronome</string>
     <string name="tempo_txt_tempo">TEMPO</string>
+    <string name="txt_tap">TAP</string>
 </resources>
