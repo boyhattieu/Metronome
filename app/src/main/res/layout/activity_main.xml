@@ -33,7 +33,7 @@
 
     </RelativeLayout>
 
-    <com.pdc.metronome.adapter.viewpager.ViewPager
+    <com.pdc.metronome.adapter.viewpager.NonSwipeViewPager
         android:id="@+id/vpg_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,6 +47,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_black_bamboo_bottom"
         android:orientation="horizontal"
+        android:gravity="center"
         android:padding="6dp" />
 
 

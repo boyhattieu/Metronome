@@ -1,17 +1,14 @@
 package com.pdc.metronome.layout;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -53,10 +50,10 @@ public class ItemBeat extends LinearLayout {
         txtBeat = new TextView(getContext());
         paramTxt = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         txtBeat.setLayoutParams(paramTxt);
-        txtBeat.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+        txtBeat.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
 
         imgChecked = new ImageView(getContext());
-        paramImg = new LayoutParams(dpToPx(28), ViewGroup.LayoutParams.WRAP_CONTENT);
+        paramImg = new LayoutParams(dpToPx(24), ViewGroup.LayoutParams.WRAP_CONTENT);
         imgChecked.setLayoutParams(paramImg);
         paramImg.setMargins(dpToPx(8), 0, 0, 0);
         imgChecked.setVisibility(INVISIBLE);
@@ -99,7 +96,7 @@ public class ItemBeat extends LinearLayout {
             txtBeat.setTextColor(getResources().getColor(R.color.color_beat_choosen));
             imgChecked.setVisibility(VISIBLE);
             imgChecked.setColorFilter(getResources().getColor(R.color.color_beat_choosen));
-            Hawk.put(Key.BEAT, txtBeat.getText());
+            Hawk.put(Key.BEAT, txtBeat.getText().toString());
         } else {
             txtBeat.setTypeface(Typeface.DEFAULT);
             txtBeat.setTextColor(getResources().getColor(R.color.tempo_txt_tap));

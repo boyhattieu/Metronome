@@ -2,4 +2,5 @@
 <resources>
     <dimen name="txt_tap">24sp</dimen>
     <dimen name="txt_beat">16sp</dimen>
+    <dimen name="txt_view_beat">20sp</dimen>
 </resources>

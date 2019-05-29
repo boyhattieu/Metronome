@@ -11,4 +11,5 @@
     <color name="bg_beat">#000000</color>
     <color name="stroke_beat">#1cf91e</color>
     <color name="txt_beat">#ffffff</color>
+    <color name="ripple">#8ceaeaea</color>
 </resources>

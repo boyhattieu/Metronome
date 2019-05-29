@@ -51,6 +51,7 @@ public class ItemTab  extends LinearLayout {
         setOrientation(VERTICAL);
         paramsImg = new LayoutParams(100,100);
         paramsTxt = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         setContainer(res, text);
         addView(imgTab);
         addView(txtTab);

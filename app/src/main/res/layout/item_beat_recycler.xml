@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/txt_beat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_beat_choosen"
+        android:textSize="@dimen/txt_tap" />
+
+    <ImageView
+        android:id="@+id/img_checked"
+        android:layout_width="24dp"
+        android:layout_marginLeft="4dp"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/txt_beat"
+        android:layout_toRightOf="@id/txt_beat"
+        android:adjustViewBounds="true" />
+
+</RelativeLayout>

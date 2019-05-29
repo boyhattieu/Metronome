@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,11 +10,114 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <LinearLayout
-        android:id="@+id/ln_beat"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_switch"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="4dp"
+        android:text="@string/txt_on_off"
+        android:textColor="@color/txt_all"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/btn_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rlt_frequency"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:switchMinWidth="50dp"
+        app:thumbTint="@drawable/switch_thumb"
+        app:trackTint="@drawable/switch_track"/>
+
+    <RelativeLayout
+        android:id="@+id/rlt_frequency"
+        android:layout_width="wrap_content"
+        android:layout_height="280dp"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_frequency_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/txt_last_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/txt_note"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/txt_last_note"
+            android:textColor="@color/txt_all"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/line"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:text="A"
+            android:textColor="@color/stroke_beat"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/txt_last_note"
+            android:layout_alignRight="@id/txt_last_note"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="36dp"
+            android:background="@color/stroke_beat" />
+
+        <TextView
+            android:id="@+id/txt_frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/txt_frequency"
+            android:textColor="@color/txt_all"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_hz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_frequency"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="44.44"
+            android:textColor="@color/stroke_beat"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_hzz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txt_hz"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="2dp"
+            android:layout_toRightOf="@id/txt_hz"
+            android:text="@string/txt_hz"
+            android:textColor="@color/stroke_beat"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
 
 </RelativeLayout>
