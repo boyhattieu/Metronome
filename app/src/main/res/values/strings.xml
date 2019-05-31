@@ -2,8 +2,9 @@
     <string name="app_name">Metronome</string>
     <string name="tempo_txt_tempo">TEMPO</string>
     <string name="txt_tap">TAP</string>
-    <string name="txt_on_off">Turn On/Off</string>
-    <string name="txt_last_note">Last note received</string>
+    <string name="txt_auto">Auto On/Off</string>
     <string name="txt_frequency">Frequency</string>
     <string name="txt_hz">Hz</string>
+    <string name="txt_too_low">TOO LOW!</string>
+    <string name="txt_too_high">TOO HIGH!</string>
 </resources>

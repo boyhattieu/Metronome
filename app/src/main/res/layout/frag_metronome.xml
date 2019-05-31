@@ -107,7 +107,7 @@
         android:id="@+id/ln_beat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
+        android:background="@color/bg_beat"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="invisible" />

@@ -151,7 +151,16 @@ public class MetronomeFrag extends Fragment {
                     x = event.getX();
                 }
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    txtBpm.setText(String.valueOf(Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)));
+                    if ((Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)) <= 20){
+                        txtBpm.setText("20");
+                        Hawk.put(Key.TEMPO, txtBpm.getText().toString());
+                    } else if ((Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)) >= 360) {
+                        txtBpm.setText("360");
+                        Hawk.put(Key.TEMPO, txtBpm.getText().toString());
+                    } else {
+                        txtBpm.setText(String.valueOf(Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)));
+                    }
+                    Log.d(TAG, "onTouch: " + Integer.valueOf(Hawk.get(Key.TEMPO, "128")));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                     Hawk.put(Key.TEMPO, txtBpm.getText().toString());
@@ -220,10 +229,18 @@ public class MetronomeFrag extends Fragment {
             int bpm = bpmCalculator.getBpm();
             updateBpm = Integer.valueOf(bpm).toString();
         } else {
-            updateBpm = String.valueOf(txtBpm.getText());
+            updateBpm = txtBpm.getText().toString();
         }
 
-        txtBpm.setText(updateBpm);
+        if (Integer.valueOf(updateBpm) <= 20){
+            txtBpm.setText("20");
+            Hawk.put(Key.TEMPO, txtBpm.getText().toString());
+        } else if (Integer.valueOf(updateBpm) >= 360){
+            txtBpm.setText("360");
+            Hawk.put(Key.TEMPO, txtBpm.getText().toString());
+        } else {
+            txtBpm.setText(updateBpm);
+        }
         Hawk.put(Key.TEMPO, updateBpm);
     }
 
@@ -272,7 +289,11 @@ public class MetronomeFrag extends Fragment {
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                     ViewAnimator.animate(btnMinus).scale(0.9f, 1f).duration(100).start();
-                    txtBpm.setText(String.valueOf(Integer.parseInt(txtBpm.getText().toString()) - 1));
+                    if ((Integer.parseInt(txtBpm.getText().toString()) - 1) <= 20){
+                        txtBpm.setText("20");
+                    } else {
+                        txtBpm.setText(String.valueOf(Integer.parseInt(txtBpm.getText().toString()) - 1));
+                    }
 
                     Hawk.put(Key.TEMPO, txtBpm.getText().toString());
                 }
@@ -314,7 +335,11 @@ public class MetronomeFrag extends Fragment {
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                     ViewAnimator.animate(btnPlus).scale(0.9f, 1f).duration(100).start();
-                    txtBpm.setText(String.valueOf(Integer.parseInt(txtBpm.getText().toString()) + 1));
+                    if ((Integer.parseInt(txtBpm.getText().toString())) >= 360) {
+                        txtBpm.setText("360");
+                    } else {
+                        txtBpm.setText(String.valueOf(Integer.parseInt(txtBpm.getText().toString()) + 1));
+                    }
 
                     Hawk.put(Key.TEMPO, txtBpm.getText().toString());
                 }

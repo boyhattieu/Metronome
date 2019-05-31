@@ -11,12 +11,12 @@
         android:scaleType="centerCrop" />
 
     <TextView
+        android:id="@+id/txt_auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/btn_switch"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4dp"
-        android:text="@string/txt_on_off"
+        android:layout_marginTop="18dp"
+        android:text="@string/txt_auto"
         android:textColor="@color/txt_all"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -25,35 +25,25 @@
         android:id="@+id/btn_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/rlt_frequency"
+        android:layout_below="@id/txt_auto"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="4dp"
         android:switchMinWidth="50dp"
         app:thumbTint="@drawable/switch_thumb"
-        app:trackTint="@drawable/switch_track"/>
+        app:trackTint="@drawable/switch_track" />
 
     <RelativeLayout
-        android:id="@+id/rlt_frequency"
-        android:layout_width="wrap_content"
-        android:layout_height="280dp"
-        android:layout_centerInParent="true"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/img_frequency_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:id="@+id/rlt_guitar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_switch"
+        android:layout_marginTop="4dp">
 
         <TextView
             android:id="@+id/txt_last_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/txt_note"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="28dp"
-            android:layout_marginBottom="4dp"
-            android:text="@string/txt_last_note"
+            android:layout_centerHorizontal="true"
             android:textColor="@color/txt_all"
             android:textSize="26sp"
             android:textStyle="bold" />
@@ -62,10 +52,9 @@
             android:id="@+id/txt_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/line"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="10dp"
-            android:text="A"
+            android:layout_below="@id/txt_last_note"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
             android:textColor="@color/stroke_beat"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -74,36 +63,74 @@
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignLeft="@id/txt_last_note"
-            android:layout_alignRight="@id/txt_last_note"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="36dp"
-            android:layout_marginRight="36dp"
+            android:layout_below="@id/txt_note"
+            android:layout_alignLeft="@id/img_guitar"
+            android:layout_alignRight="@id/img_guitar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="80dp"
             android:background="@color/stroke_beat" />
-
-        <TextView
-            android:id="@+id/txt_frequency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/line"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
-            android:text="@string/txt_frequency"
-            android:textColor="@color/txt_all"
-            android:textSize="26sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_hz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txt_frequency"
+            android:layout_below="@id/line"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="4dp"
-            android:text="44.44"
+            android:layout_marginTop="2dp"
             android:textColor="@color/stroke_beat"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_too_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txt_hz"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="2dp"
+            android:text="@string/txt_too_low"
+            android:textColor="@color/txt_too_low"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/txt_incomplete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txt_hz"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_toLeftOf="@id/txt_hz"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/txt_too_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txt_hz"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="2dp"
+            android:text="@string/txt_too_high"
+            android:textColor="@color/txt_too_high"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/txt_excessive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txt_hz"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_toRightOf="@id/txt_hzz"
+            android:textSize="16sp"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/txt_hzz"
@@ -117,7 +144,202 @@
             android:textColor="@color/stroke_beat"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/img_guitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_hz"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:id="@+id/img_guitar_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_hz"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:adjustViewBounds="true" />
+
+        <LinearLayout
+            android:id="@+id/ln_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_last_note"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:background="@color/bg_beat"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:visibility="invisible" />
+
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_e4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignRight="@id/img_guitar"-->
+        <!--android:layout_alignBottom="@id/img_guitar"-->
+        <!--android:layout_marginRight="96dp"-->
+        <!--android:layout_marginBottom="168dp"-->
+        <!--android:text="E4"-->
+        <!--android:textColor="@color/bg_beat"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_e2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignLeft="@id/img_guitar"-->
+        <!--android:layout_alignBottom="@id/txt_e4"-->
+        <!--android:layout_marginLeft="96dp"-->
+        <!--android:text="E2"-->
+        <!--android:textColor="@color/bg_beat"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_a2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignLeft="@id/txt_e2"-->
+        <!--android:layout_alignBottom="@id/txt_e4"-->
+        <!--android:layout_marginLeft="14dp"-->
+        <!--android:layout_marginBottom="72dp"-->
+        <!--android:text="A2"-->
+        <!--android:textColor="@color/bg_beat"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_b3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignRight="@id/txt_e4"-->
+        <!--android:layout_alignBottom="@id/txt_a2"-->
+        <!--android:layout_marginRight="14dp"-->
+        <!--android:text="B3"-->
+        <!--android:textColor="@color/bg_beat"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_g3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignRight="@id/txt_b3"-->
+        <!--android:layout_alignBottom="@id/txt_b3"-->
+        <!--android:layout_marginRight="12dp"-->
+        <!--android:layout_marginBottom="68dp"-->
+        <!--android:text="G3"-->
+        <!--android:textColor="@color/bg_beat"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_d3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignLeft="@id/txt_a2"-->
+        <!--android:layout_alignBottom="@id/txt_g3"-->
+        <!--android:layout_marginLeft="12dp"-->
+        <!--android:text="D3"-->
+        <!--android:textColor="@color/bg_beat"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+
     </RelativeLayout>
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/rlt_frequency"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="280dp"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:gravity="center">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/img_frequency_bg"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/txt_last_note"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_above="@id/txt_note"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:layout_marginLeft="28dp"-->
+    <!--android:layout_marginRight="28dp"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:text="@string/txt_last_note"-->
+    <!--android:textColor="@color/txt_all"-->
+    <!--android:textSize="26sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/txt_note"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_above="@id/line"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:layout_marginBottom="10dp"-->
+    <!--android:text="A"-->
+    <!--android:textColor="@color/stroke_beat"-->
+    <!--android:textSize="20sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<View-->
+    <!--android:id="@+id/line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_alignLeft="@id/txt_last_note"-->
+    <!--android:layout_alignRight="@id/txt_last_note"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:layout_marginLeft="36dp"-->
+    <!--android:layout_marginRight="36dp"-->
+    <!--android:background="@color/stroke_beat" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/txt_frequency"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/line"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:text="@string/txt_frequency"-->
+    <!--android:textColor="@color/txt_all"-->
+    <!--android:textSize="26sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/txt_hz"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/txt_frequency"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:text="44.44"-->
+    <!--android:textColor="@color/stroke_beat"-->
+    <!--android:textSize="20sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/txt_hzz"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignBottom="@id/txt_hz"-->
+    <!--android:layout_marginLeft="4dp"-->
+    <!--android:layout_marginBottom="2dp"-->
+    <!--android:layout_toRightOf="@id/txt_hz"-->
+    <!--android:text="@string/txt_hz"-->
+    <!--android:textColor="@color/stroke_beat"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--</RelativeLayout>-->
 
 
 </RelativeLayout>
