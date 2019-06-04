@@ -1,6 +1,7 @@
 package com.pdc.metronome.ui.frags;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,6 +60,8 @@ public class MetronomeFrag extends Fragment {
     private long timeSleep = 0;
     private SoundManager soundManager;
     private Thread thread;
+
+    protected FragmentActivity mActivity;
 
     private boolean isStart = false;
 
@@ -151,7 +155,7 @@ public class MetronomeFrag extends Fragment {
                     x = event.getX();
                 }
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    if ((Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)) <= 20){
+                    if ((Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)) <= 20) {
                         txtBpm.setText("20");
                         Hawk.put(Key.TEMPO, txtBpm.getText().toString());
                     } else if ((Integer.valueOf(Hawk.get(Key.TEMPO, "128")) + Math.round(event.getX() - x)) >= 360) {
@@ -207,7 +211,7 @@ public class MetronomeFrag extends Fragment {
     }
 
     private void checkIsPlaying() {
-        if (isStart){
+        if (isStart) {
             isStart = !isStart;
             ViewAnimator.animate(btnPlay).scale(0.9f, 1f).duration(100).start();
             Glide.with(getContext()).load(R.drawable.btn_play).into(btnPlay);
@@ -232,10 +236,10 @@ public class MetronomeFrag extends Fragment {
             updateBpm = txtBpm.getText().toString();
         }
 
-        if (Integer.valueOf(updateBpm) <= 20){
+        if (Integer.valueOf(updateBpm) <= 20) {
             txtBpm.setText("20");
             Hawk.put(Key.TEMPO, txtBpm.getText().toString());
-        } else if (Integer.valueOf(updateBpm) >= 360){
+        } else if (Integer.valueOf(updateBpm) >= 360) {
             txtBpm.setText("360");
             Hawk.put(Key.TEMPO, txtBpm.getText().toString());
         } else {
@@ -255,7 +259,7 @@ public class MetronomeFrag extends Fragment {
             @Override
             public void run() {
                 bpmCalculator.clearTimes();
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         toastRemind();
@@ -289,7 +293,7 @@ public class MetronomeFrag extends Fragment {
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                     ViewAnimator.animate(btnMinus).scale(0.9f, 1f).duration(100).start();
-                    if ((Integer.parseInt(txtBpm.getText().toString()) - 1) <= 20){
+                    if ((Integer.parseInt(txtBpm.getText().toString()) - 1) <= 20) {
                         txtBpm.setText("20");
                     } else {
                         txtBpm.setText(String.valueOf(Integer.parseInt(txtBpm.getText().toString()) - 1));
@@ -350,13 +354,13 @@ public class MetronomeFrag extends Fragment {
 
     private void onPlay() {
         if (isStart) {
-            playThread();
+            startThread();
         } else {
             stopThread();
         }
     }
 
-    private void playThread() {
+    private void startThread() {
         if (thread == null) {
             thread = new Thread(runnable);
             thread.start();
@@ -391,10 +395,6 @@ public class MetronomeFrag extends Fragment {
         for (int i = 0; i < beats; i++) {
             Indicator indicator = new Indicator(getContext());
             if (i != 0) {
-//                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(dpToPx(8), dpToPx(8));
-//                layoutParams.setMargins(dpToPx(6), dpToPx(6), dpToPx(6), dpToPx(6));
-//                indicator.setLayoutParams(layoutParams);
-//                indicator.setBackgroundResource(R.drawable.bg_indicator);
                 indicator.setSize();
             }
             indicators.add(indicator);
@@ -418,7 +418,7 @@ public class MetronomeFrag extends Fragment {
                     soundManager.play(SoundManager.TypeSound.LOOP);
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         colorChanged(beat);
@@ -439,11 +439,8 @@ public class MetronomeFrag extends Fragment {
     private void colorChanged(int position) {
         for (int i = 0; i < indicators.size(); i++) {
             indicators.get(i).colorChanged(false);
-            Log.d(TAG, "colorChanged1: " + i);
         }
         indicators.get(position).colorChanged(true);
-        Log.d(TAG, "colorChanged2: " + position);
-
     }
 
     public static int dpToPx(int dp) {
@@ -452,7 +449,7 @@ public class MetronomeFrag extends Fragment {
 
     private int HeightScreen() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;
     }
 
@@ -489,5 +486,14 @@ public class MetronomeFrag extends Fragment {
             itemBeats.get(i).beatChoice(false);
         }
         itemBeats.get(position).beatChoice(true);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity){
+            mActivity = (FragmentActivity) context;
+        }
     }
 }

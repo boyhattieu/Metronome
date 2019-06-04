@@ -1,15 +1,18 @@
 package com.pdc.metronome.ui.frags;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.media.audiofx.NoiseSuppressor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.orhanobut.hawk.Hawk;
+import com.pdc.metronome.ListFrequency;
 import com.pdc.metronome.R;
 import com.pdc.metronome.constant.Key;
 import com.pdc.metronome.item.NotesSound;
@@ -33,14 +37,13 @@ import java.util.List;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.filters.HighPass;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class BeatFrag extends Fragment {
-
-    private static final String TAG = "BeatFrag";
 
     private List<ItemNote> itemNotes;
     private LinearLayout lnNote;
@@ -63,12 +66,16 @@ public class BeatFrag extends Fragment {
     private NotesSound notesSound;
     private CountDownTimer count;
 
+    protected FragmentActivity mActivity;
+
     private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.frag_beat, container, false);
+
+        Hawk.put(Key.NOTE, "");
 
         initView();
         setImage();
@@ -158,12 +165,14 @@ public class BeatFrag extends Fragment {
     }
 
     private void frequencySeeking() {
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
+        final AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
+
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
             public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
                 final float pitchInHz = pitchDetectionResult.getPitch();
-                getActivity().runOnUiThread(new Runnable() {
+
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         processPitch(pitchInHz);
@@ -175,8 +184,10 @@ public class BeatFrag extends Fragment {
         AudioProcessor processor = new
                 PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
         dispatcher.addAudioProcessor(processor);
-        audioThread = new Thread(dispatcher, "Audio Thread");
-        audioThread.start();
+        if (audioThread == null) {
+            audioThread = new Thread(dispatcher, "Audio Thread");
+            audioThread.start();
+        }
     }
 
     private void processPitch(float pitchInHz) {
@@ -186,6 +197,29 @@ public class BeatFrag extends Fragment {
         if (!btnSwitch.isChecked()) {
             whenSwitchIsOff(pitchInHz);
         }
+    }
+
+    private void invisibleText() {
+        txtIncomplete.setVisibility(View.INVISIBLE);
+        txtExcessive.setVisibility(View.INVISIBLE);
+    }
+
+    private void setExcessiveText(float pitchInHz, int number) {
+        int pitch = Math.round(pitchInHz);
+        if (pitchInHz >= 360) {
+            txtExcessive.setVisibility(View.INVISIBLE);
+        } else {
+            txtExcessive.setVisibility(View.VISIBLE);
+            txtIncomplete.setVisibility(View.INVISIBLE);
+            txtExcessive.setText("+" + String.valueOf(pitch - number));
+        }
+    }
+
+    private void setIncompleteText(float pitchInHz, int number) {
+        int pitch = Math.round(pitchInHz);
+        txtIncomplete.setVisibility(View.VISIBLE);
+        txtExcessive.setVisibility(View.INVISIBLE);
+        txtIncomplete.setText(String.valueOf(pitch - number));
     }
 
     private void whenSwitchIsOff(float pitchInHz) {
@@ -212,11 +246,53 @@ public class BeatFrag extends Fragment {
         }
     }
 
+    private void whenSwitchIsOn(float pitchInHz) {
+        setTextHz(pitchInHz);
+
+        if (pitchInHz >= 82.33 && pitchInHz < 82.49) {
+            handleOn("E2");
+        } else if (pitchInHz >= 109.92 && pitchInHz < 110.08) {
+            handleOn("A2");
+        } else if (pitchInHz >= 146.75 && pitchInHz < 146.91) {
+            handleOn("D3");
+        } else if (pitchInHz >= 195.92 && pitchInHz <= 196.08) {
+            handleOn("G3");
+        } else if (pitchInHz >= 246.86 && pitchInHz < 247.02) {
+            handleOn("B3");
+        } else if (pitchInHz >= 329.55 && pitchInHz <= 329.71) {
+            handleOn("E4");
+        }
+    }
+
+    private void handleOn(String noteName) {
+        countingWork();
+        txtNote.setText(noteName);
+        ViewAnimator.animate(imgGuitar2).fadeIn().duration(500).start();
+
+        if (noteName.equals("E2")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_e2).into(imgGuitar2);
+        }
+        if (noteName.equals("A2")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_a2).into(imgGuitar2);
+        }
+        if (noteName.equals("D3")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_d3).into(imgGuitar2);
+        }
+        if (noteName.equals("G3")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_g3).into(imgGuitar2);
+        }
+        if (noteName.equals("B3")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_b3).into(imgGuitar2);
+        }
+        if (noteName.equals("E4")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_e4).into(imgGuitar2);
+        }
+    }
+
     private void handleE4(float pitchInHz) {
         if (pitchInHz > 0) {
             if (pitchInHz >= 329.55 && pitchInHz <= 329.71) {
-                invisibleText();
-                checkTime();
+                countingWork();
             }
             if (pitchInHz < 329.55) {
                 setIncompleteText(pitchInHz, 329);
@@ -226,113 +302,146 @@ public class BeatFrag extends Fragment {
             }
             if (pitchInHz <= 313.55) {
                 setVisibility("low");
+                invisibleText();
             }
             if (pitchInHz >= 345.71) {
                 setVisibility("high");
+                invisibleText();
             }
         } else {
             setVisibility("hideAll");
+            invisibleText();
         }
-    }
-
-    private void invisibleText() {
-        txtIncomplete.setVisibility(View.INVISIBLE);
-        txtExcessive.setVisibility(View.INVISIBLE);
-    }
-
-    private void setExcessiveText(float pitchInHz, int number) {
-        int pitch = Math.round(pitchInHz);
-        txtExcessive.setVisibility(View.VISIBLE);
-        txtExcessive.setText("+" + String.valueOf(pitch + number));
-    }
-
-    private void setIncompleteText(float pitchInHz, int number) {
-        int pitch = Math.round(pitchInHz);
-        txtIncomplete.setVisibility(View.VISIBLE);
-        txtIncomplete.setText(String.valueOf(pitch - number));
     }
 
     private void handleB3(float pitchInHz) {
         if (pitchInHz > 0) {
             if (pitchInHz >= 246.86 && pitchInHz <= 247.02) {
-                checkTime();
+                countingWork();
+            }
+            if (pitchInHz < 246.86) {
+                setIncompleteText(pitchInHz, 247);
+            }
+            if (pitchInHz > 247.02) {
+                setExcessiveText(pitchInHz, 247);
             }
             if (pitchInHz <= 230.86) {
                 setVisibility("low");
+                invisibleText();
             }
             if (pitchInHz >= 263.02) {
                 setVisibility("high");
+                invisibleText();
             }
         } else {
             setVisibility("hideAll");
+            invisibleText();
         }
     }
 
     private void handleG3(float pitchInHz) {
         if (pitchInHz > 0) {
             if (pitchInHz >= 195.92 && pitchInHz <= 196.08) {
-                checkTime();
+                countingWork();
+            }
+            if (pitchInHz < 195.92) {
+                setIncompleteText(pitchInHz, 195);
+            }
+            if (pitchInHz > 196.08) {
+                setExcessiveText(pitchInHz, 196);
             }
             if (pitchInHz <= 179.92) {
                 setVisibility("low");
+                invisibleText();
             }
             if (pitchInHz >= 212.08) {
                 setVisibility("high");
+                invisibleText();
             }
         } else {
             setVisibility("hideAll");
+            invisibleText();
         }
     }
 
     private void handleD3(float pitchInHz) {
         if (pitchInHz > 0) {
             if (pitchInHz >= 146.75 && pitchInHz <= 146.91) {
-                checkTime();
+                countingWork();
+            }
+            if (pitchInHz < 146.75) {
+                setIncompleteText(pitchInHz, 146);
+            }
+            if (pitchInHz > 146.91) {
+                setExcessiveText(pitchInHz, 147);
             }
             if (pitchInHz <= 130.75) {
                 setVisibility("low");
+                invisibleText();
             }
             if (pitchInHz >= 162.91) {
                 setVisibility("high");
+                invisibleText();
             }
         } else {
             setVisibility("hideAll");
+            invisibleText();
         }
     }
 
     private void handleA2(float pitchInHz) {
         if (pitchInHz > 0) {
             if (pitchInHz >= 109.92 && pitchInHz <= 110.08) {
-                checkTime();
+                countingWork();
+            }
+            if (pitchInHz < 109.92) {
+                setIncompleteText(pitchInHz, 109);
+            }
+            if (pitchInHz > 110.08) {
+                setExcessiveText(pitchInHz, 110);
             }
             if (pitchInHz <= 93.92) {
                 setVisibility("low");
+                invisibleText();
             }
             if (pitchInHz >= 126.08) {
                 setVisibility("high");
+                invisibleText();
             }
         } else {
             setVisibility("hideAll");
+            invisibleText();
         }
     }
 
     private void handleE2(float pitchInHz) {
         if (pitchInHz > 0) {
             if (pitchInHz >= 82.33 && pitchInHz <= 82.49) {
-                checkTime();
+                countingWork();
+            }
+            if (pitchInHz < 82.33) {
+                setIncompleteText(pitchInHz, 82);
+            }
+            if (pitchInHz > 82.49) {
+                setExcessiveText(pitchInHz, 83);
             }
             if (pitchInHz <= 66.33) {
                 setVisibility("low");
-                checkThread();
+                invisibleText();
             }
             if (pitchInHz >= 98.49) {
                 setVisibility("high");
-                checkThread();
+                invisibleText();
             }
         } else {
             setVisibility("hideAll");
-            checkThread();
+            invisibleText();
         }
+    }
+
+    private void countingWork() {
+        invisibleText();
+        checkTime();
     }
 
     private void setVisibility(String typeVisibility) {
@@ -392,33 +501,6 @@ public class BeatFrag extends Fragment {
         }
     }
 
-    private void whenSwitchIsOn(float pitchInHz) {
-        setTextHz(pitchInHz);
-
-        if (pitchInHz >= 110 && pitchInHz < 123.47) {
-            //A
-            txtNote.setText("A");
-        } else if (pitchInHz >= 123.47 && pitchInHz < 130.81) {
-            //B
-            txtNote.setText("B");
-        } else if (pitchInHz >= 130.81 && pitchInHz < 146.83) {
-            //C
-            txtNote.setText("C");
-        } else if (pitchInHz >= 146.83 && pitchInHz < 164.81) {
-            //D
-            txtNote.setText("D");
-        } else if (pitchInHz >= 164.81 && pitchInHz <= 174.61) {
-            //E
-            txtNote.setText("E");
-        } else if (pitchInHz >= 174.61 && pitchInHz < 185) {
-            //F
-            txtNote.setText("F");
-        } else if (pitchInHz >= 185 && pitchInHz < 196) {
-            //G
-            txtNote.setText("G");
-        }
-    }
-
     private void onListener() {
         onClickBtnSwitch();
         onClickNoteText();
@@ -436,32 +518,32 @@ public class BeatFrag extends Fragment {
 
     private void onClickG3() {
         notesSound.play(NotesSound.TypeSound.G3);
-        setNoteImage("G3");
+        setImage("G3");
     }
 
     private void onClickD3() {
         notesSound.play(NotesSound.TypeSound.D3);
-        setNoteImage("D3");
+        setImage("D3");
     }
 
     private void onClickB3() {
         notesSound.play(NotesSound.TypeSound.B3);
-        setNoteImage("B3");
+        setImage("B3");
     }
 
     private void onClickA2() {
         notesSound.play(NotesSound.TypeSound.A2);
-        setNoteImage("A2");
+        setImage("A2");
     }
 
     private void onClickE4() {
         notesSound.play(NotesSound.TypeSound.E4);
-        setNoteImage("E4");
+        setImage("E4");
     }
 
     private void onClickE2() {
         notesSound.play(NotesSound.TypeSound.E2);
-        setNoteImage("E2");
+        setImage("E2");
     }
 
     private void onClickBtnSwitch() {
@@ -481,16 +563,16 @@ public class BeatFrag extends Fragment {
 
     private void toastRemind(int type) {
         if (type == 0) {
-            Toast.makeText(getActivity(), "Auto is turned on!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, "Auto is turned on!", Toast.LENGTH_SHORT).show();
         }
         if (type == 1) {
-            Toast.makeText(getActivity(), "Auto is turned off!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, "Auto is turned off!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void switchTurnedOn() {
         setTextBackground("ON");
-        invisibleView();
+        setImage(0);
         animatorInvisibleView();
         txtLastNote.setText("Last note received");
         txtNote.setText("-");
@@ -500,7 +582,7 @@ public class BeatFrag extends Fragment {
 
     private void switchTurnedOff() {
         setTextBackground("OFF");
-        setImgGuitar2();
+        setImage(1);
         visibleView();
         animatorVisibleView();
         txtLastNote.setText("Note choosen");
@@ -509,7 +591,40 @@ public class BeatFrag extends Fragment {
         frequencySeeking();
     }
 
-    private void setNoteImage(String TYPE) {
+    private void checkThread() {
+        if (audioThread != null) {
+            audioThread.interrupt();
+            audioThread = null;
+        }
+    }
+
+    private void animatorInvisibleView() {
+        ViewAnimator.animate(imgGuitar2).fadeOut().duration(500).start();
+        Glide.with(getContext()).load(R.drawable.guitar_change).into(imgGuitar2);
+    }
+
+    private void animatorVisibleView() {
+        ViewAnimator.animate(imgGuitar2).fadeIn().duration(500).start();
+    }
+
+    private void visibleView() {
+        imgGuitar2.setVisibility(View.VISIBLE);
+    }
+
+    private void setImage(int type) {
+        if (type == 0) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Glide.with(getContext()).load(0).into(imgGuitar2);
+                }
+            }, 500);
+        } else {
+            Glide.with(getContext()).load(R.drawable.guitar_change).into(imgGuitar2);
+        }
+    }
+
+    private void setImage(String TYPE) {
         if (TYPE.equals("E2")) {
             Glide.with(getContext()).load(R.drawable.guitar_e2).into(imgGuitar2);
         }
@@ -528,38 +643,6 @@ public class BeatFrag extends Fragment {
         if (TYPE.equals("G3")) {
             Glide.with(getContext()).load(R.drawable.guitar_g3).into(imgGuitar2);
         }
-    }
-
-    private void checkThread() {
-        if (audioThread != null) {
-            audioThread.interrupt();
-            audioThread = null;
-        }
-    }
-
-    private void invisibleView() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                imgGuitar2.setVisibility(View.INVISIBLE);
-            }
-        }, 500);
-    }
-
-    private void animatorInvisibleView() {
-        ViewAnimator.animate(imgGuitar2).fadeOut().duration(500).start();
-    }
-
-    private void animatorVisibleView() {
-        ViewAnimator.animate(imgGuitar2).fadeIn().duration(500).start();
-    }
-
-    private void visibleView() {
-        imgGuitar2.setVisibility(View.VISIBLE);
-    }
-
-    private void setImgGuitar2() {
-        Glide.with(getContext()).load(R.drawable.guitar_change).into(imgGuitar2);
     }
 
     private void setImage() {
@@ -590,7 +673,7 @@ public class BeatFrag extends Fragment {
 
     private int WidthScreen() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
     }
 
@@ -603,5 +686,26 @@ public class BeatFrag extends Fragment {
             itemNotes.get(i).noteChoice(false);
         }
         itemNotes.get(position).noteChoice(true);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity) {
+            mActivity = (FragmentActivity) context;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        checkThread();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        frequencySeeking();
     }
 }

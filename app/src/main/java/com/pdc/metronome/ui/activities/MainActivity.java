@@ -2,7 +2,10 @@ package com.pdc.metronome.ui.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -14,8 +17,11 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.pdc.metronome.R;
 import com.pdc.metronome.adapter.viewpager.NonSwipeViewPager;
 import com.pdc.metronome.adapter.viewpager.PagerAdapter;
@@ -26,17 +32,20 @@ import com.pdc.metronome.ui.frags.MetronomeFrag;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<Fragment> fragments;
     private NonSwipeViewPager viewPagerMain;
     private LinearLayout lnTabMain;
-    private ImageView imgAppLogo;
     private ImageView imgCompanyLogo;
     private ImageView topBackground;
+    private TextView txtFunction;
 
     private List<ItemTab> itemTabs;
+
+    private boolean doubleBackPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,20 +66,30 @@ public class MainActivity extends AppCompatActivity {
     private void loadApp() {
         initView();
         setImage();
+        setFuncFont();
         initTab();
         initFrag();
         initViewPager();
         registerListener();
     }
 
+    private void setFuncFont() {
+        AssetManager am = getApplicationContext().getAssets();
+
+        Typeface typeface = Typeface.createFromAsset(am,
+                String.format(Locale.US, "fonts/%s", "hanaleiFill.ttf"));
+
+        txtFunction.setTypeface(typeface);
+        txtFunction.setText("Metronome");
+    }
+
     private void setImage() {
         Glide.with(this).load(R.drawable.bg_black_bamboo).into(topBackground);
-        Glide.with(this).load(R.drawable.txt_metronome_2).into(imgAppLogo);
         Glide.with(this).load(R.drawable.logo_panda_company).into(imgCompanyLogo);
     }
 
     private void initView() {
-        imgAppLogo = findViewById(R.id.img_app_logo);
+        txtFunction = findViewById(R.id.txt_function);
         imgCompanyLogo = findViewById(R.id.img_company_logo);
         topBackground = findViewById(R.id.top_bg);
     }
@@ -120,9 +139,21 @@ public class MainActivity extends AppCompatActivity {
                 public void onClickInterface(int position) {
                     viewPagerMain.setCurrentItem(position);
                     onSelectedTab(position);
+                    setFuncText(position);
                 }
             });
             lnTabMain.addView(itemTab);
+        }
+    }
+
+    private void setFuncText(int position) {
+        if (position == 0){
+            txtFunction.setText("Metronome");
+            ViewAnimator.animate(txtFunction).fadeIn().duration(500).start();
+        }
+        if (position == 1){
+            txtFunction.setText("Guitar Tuning");
+            ViewAnimator.animate(txtFunction).fadeIn().duration(500).start();
         }
     }
 
@@ -149,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                         loadApp();
                     } else {
                         this.finish();
+                        Toast.makeText(this, "Please allow permission!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -176,5 +208,23 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isMarsMallow() {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackPressed) {
+            super.onBackPressed();
+            finish();
+        }
+
+        this.doubleBackPressed = true;
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackPressed = false;
+            }
+        }, 2000);
     }
 }

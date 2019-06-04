@@ -104,6 +104,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="2dp"
             android:layout_toLeftOf="@id/txt_hz"
+            android:textColor="@color/txt_too_low"
             android:textSize="16sp"
             android:visibility="invisible" />
 
@@ -129,6 +130,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginBottom="2dp"
             android:layout_toRightOf="@id/txt_hzz"
+            android:textColor="@color/txt_too_high"
             android:textSize="16sp"
             android:visibility="invisible" />
 

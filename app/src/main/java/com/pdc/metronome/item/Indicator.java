@@ -2,6 +2,7 @@ package com.pdc.metronome.item;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -17,11 +18,6 @@ public class Indicator extends RelativeLayout {
     public Indicator(Context context) {
         super(context);
         initView();
-        setImage();
-    }
-
-    private void setImage() {
-        Glide.with(getContext()).load(R.drawable.indicator).into(indicator);
     }
 
     private void initView() {
@@ -33,9 +29,9 @@ public class Indicator extends RelativeLayout {
     public void colorChanged(boolean isSelected) {
         if (isSelected) {
             ViewAnimator.animate(indicator).scale(0.5f,1f).duration(100).start();
-            Glide.with(getContext()).load(R.drawable.indicator_green).into(indicator);
+            indicator.setColorFilter(Color.parseColor("#1cf91e"));
         } else {
-            Glide.with(getContext()).load(R.drawable.indicator).into(indicator);
+            indicator.setColorFilter(Color.WHITE);
         }
     }
 
