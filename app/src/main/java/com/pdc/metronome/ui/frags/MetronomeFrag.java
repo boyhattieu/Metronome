@@ -206,8 +206,6 @@ public class MetronomeFrag extends Fragment {
         bpmCalculator.recordTime();
         resetTimer();
         updateBpm();
-
-        // TODO: 29/05/2019 bpm calculate
     }
 
     private void checkIsPlaying() {

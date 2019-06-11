@@ -1,9 +1,5 @@
 package com.pdc.metronome.item;
 
-import android.widget.Toast;
-
-import com.pdc.metronome.ui.activities.MainActivity;
-
 import java.util.ArrayList;
 
 public class BpmCalculator {

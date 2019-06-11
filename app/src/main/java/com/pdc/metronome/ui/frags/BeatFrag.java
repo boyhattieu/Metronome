@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.orhanobut.hawk.Hawk;
-import com.pdc.metronome.ListFrequency;
 import com.pdc.metronome.R;
 import com.pdc.metronome.constant.Key;
 import com.pdc.metronome.item.NotesSound;
@@ -37,7 +36,6 @@ import java.util.List;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
-import be.tarsos.dsp.filters.HighPass;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
@@ -75,8 +73,7 @@ public class BeatFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.frag_beat, container, false);
 
-        Hawk.put(Key.NOTE, "");
-
+        setNone();
         initView();
         setImage();
         initData();
@@ -85,6 +82,10 @@ public class BeatFrag extends Fragment {
         onListener();
 
         return rootView;
+    }
+
+    private void setNone() {
+        Hawk.put(Key.NOTE, "none");
     }
 
     private void initData() {
@@ -184,6 +185,8 @@ public class BeatFrag extends Fragment {
         AudioProcessor processor = new
                 PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
         dispatcher.addAudioProcessor(processor);
+
+        checkThread();
         if (audioThread == null) {
             audioThread = new Thread(dispatcher, "Audio Thread");
             audioThread.start();
@@ -243,6 +246,9 @@ public class BeatFrag extends Fragment {
         }
         if (Hawk.get(Key.NOTE).equals("E4")) {
             handleE4(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("none")){
+            checkThread();
         }
     }
 
@@ -581,6 +587,7 @@ public class BeatFrag extends Fragment {
     }
 
     private void switchTurnedOff() {
+        setNone();
         setTextBackground("OFF");
         setImage(1);
         visibleView();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Metronome</string>
+    <string name="app_name">Guitar Tuning</string>
     <string name="tempo_txt_tempo">TEMPO</string>
     <string name="txt_tap">TAP</string>
     <string name="txt_auto">Auto On/Off</string>

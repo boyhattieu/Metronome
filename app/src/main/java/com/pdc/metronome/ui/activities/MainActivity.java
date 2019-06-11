@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         int width = WidthScreen() / 2;
         itemTabs = new ArrayList<>();
         itemTabs.add(new ItemTab(this, R.drawable.ic_metronome, "Metronome", width, 0));
-        itemTabs.add(new ItemTab(this, R.drawable.ic_beat, "Frequency", width, 1));
+        itemTabs.add(new ItemTab(this, R.drawable.ic_beat, "Guitar Tuning", width, 1));
 
         itemTabs.get(0).selected(true);
         lnTabMain.setWeightSum(itemTabs.size());

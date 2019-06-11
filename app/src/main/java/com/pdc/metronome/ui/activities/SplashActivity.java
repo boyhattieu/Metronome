@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
     private void initImage() {
         Glide.with(SplashActivity.this).load(R.drawable.img_ls_bg).into(imgBg);
         Glide.with(SplashActivity.this).load(R.drawable.img_guitar).into(imgGuitar);
-        Glide.with(SplashActivity.this).load(R.drawable.img_company_name).into(imgCompanyName);
+        Glide.with(SplashActivity.this).load(R.drawable.img_app_name).into(imgCompanyName);
         Glide.with(SplashActivity.this).load(R.drawable.img_guitar_shadow).into(imgGuitarShadow);
         Glide.with(SplashActivity.this).load(R.drawable.img_disc_shadow).into(imgDiscShadow);
         Glide.with(SplashActivity.this).load(R.drawable.img_cd).into(imgDisc);
