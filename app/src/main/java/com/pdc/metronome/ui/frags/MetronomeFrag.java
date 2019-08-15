@@ -113,7 +113,6 @@ public class MetronomeFrag extends Fragment {
         itemBeats.add(new com.pdc.metronome.layout.ItemBeat(getContext(), "9/8", R.drawable.img_checked, 9, height));
         itemBeats.add(new com.pdc.metronome.layout.ItemBeat(getContext(), "12/8", R.drawable.img_checked, 10, height));
 
-
         for (int i = 0; i < itemBeats.size(); i++) {
             if (itemBeats.get(i).getText().equals(Hawk.get(Key.BEAT, "4/4"))) {
                 itemBeats.get(i).beatChoice(true);

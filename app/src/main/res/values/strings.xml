@@ -7,4 +7,5 @@
     <string name="txt_hz">Hz</string>
     <string name="txt_too_low">TOO LOW!</string>
     <string name="txt_too_high">TOO HIGH!</string>
+    <string name="txt_guitar">Choose Your Guitar</string>
 </resources>

@@ -10,33 +10,78 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/txt_auto"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rlt_left"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="@string/txt_auto"
-        android:textColor="@color/txt_all"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:layout_marginLeft="8dp">
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/btn_switch"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txt_guitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="@string/txt_guitar"
+            android:textColor="@color/txt_all"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_guitar_choosen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_guitar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/bg_beat"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/txt_all"
+            android:textSize="@dimen/txt_beat"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlt_right"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txt_auto"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:switchMinWidth="50dp"
-        app:thumbTint="@drawable/switch_thumb"
-        app:trackTint="@drawable/switch_track" />
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp">
+
+        <TextView
+            android:id="@+id/txt_auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="@string/txt_auto"
+            android:textColor="@color/txt_all"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/btn_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_auto"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:switchMinWidth="50dp"
+            app:thumbTint="@drawable/switch_thumb"
+            app:trackTint="@drawable/switch_track" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlt_guitar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_switch"
+        android:layout_below="@id/rlt_right"
         android:layout_marginTop="4dp">
 
         <TextView
@@ -179,5 +224,14 @@
             android:visibility="invisible" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_guitar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_beat"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible" />
 
 </RelativeLayout>

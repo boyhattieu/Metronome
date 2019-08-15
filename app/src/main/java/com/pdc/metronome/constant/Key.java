@@ -4,6 +4,8 @@ public interface Key {
     String TEMPO = "tempo";
     String BEAT = "beat";
     String NOTE = "note";
+    String GUITAR = "guitar";
+    String GUITAR_CHOOSEN = "guitar choosen";
     int REQUEST_CODE_PERMISSION = 1000;
     long RESET_DURATION = 2000;
 

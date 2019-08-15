@@ -1,9 +1,9 @@
 package com.pdc.metronome.ui.frags;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.media.audiofx.NoiseSuppressor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -28,6 +28,7 @@ import com.orhanobut.hawk.Hawk;
 import com.pdc.metronome.R;
 import com.pdc.metronome.constant.Key;
 import com.pdc.metronome.item.NotesSound;
+import com.pdc.metronome.layout.ItemGuitar;
 import com.pdc.metronome.layout.ItemNote;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 public class BeatFrag extends Fragment {
 
     private List<ItemNote> itemNotes;
+    private List<ItemGuitar> itemGuitars;
     private LinearLayout lnNote;
 
     private ImageView imgBackground;
@@ -57,12 +59,15 @@ public class BeatFrag extends Fragment {
     private TextView txtTooLow;
     private TextView txtIncomplete;
     private TextView txtExcessive;
+    private TextView txtGuitar;
 
     private SwitchCompat btnSwitch;
     private Thread audioThread;
 
     private NotesSound notesSound;
     private CountDownTimer count;
+
+    private LinearLayout lnGuitar;
 
     protected FragmentActivity mActivity;
 
@@ -77,6 +82,7 @@ public class BeatFrag extends Fragment {
         initView();
         setImage();
         initData();
+        checkGuitarType();
         setTextBackground("OFF");
         switchTurnedOff();
         onListener();
@@ -84,28 +90,51 @@ public class BeatFrag extends Fragment {
         return rootView;
     }
 
-    private void setNone() {
-        Hawk.put(Key.NOTE, "none");
+    private void checkGuitarType() {
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Classic")) {
+            selectedGuitarClassic();
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 4-String")) {
+            selectedGuitarBass4String();
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 5-String")) {
+            selectedGuitarBass5String();
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 6-String")) {
+            selectedGuitarBass6String();
+        }
     }
 
-    private void initData() {
+    private void clearList() {
+        if (!itemNotes.isEmpty()) {
+            itemNotes.clear();
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void selectedGuitarClassic() {
+        setGuitarImages();
         int width = WidthScreen() / 6;
         itemNotes = new ArrayList<>();
+        clearList();
         itemNotes.add(new ItemNote(getContext(), "E2", width, 0));
         itemNotes.add(new ItemNote(getContext(), "A2", width, 1));
         itemNotes.add(new ItemNote(getContext(), "D3", width, 2));
         itemNotes.add(new ItemNote(getContext(), "G3", width, 3));
         itemNotes.add(new ItemNote(getContext(), "B3", width, 4));
         itemNotes.add(new ItemNote(getContext(), "E4", width, 5));
+        lnNote.removeAllViews();
 
-
+        if (!btnSwitch.isChecked()) {
+            txtNote.setText("Tap here to choose note");
+        }
         for (int i = 0; i < itemNotes.size(); i++) {
             final ItemNote itemNote = itemNotes.get(i);
             itemNote.setOnClickItem(new ItemNote.IOnClickItem() {
                 @Override
                 public void onClickInterface(int position) {
-                    onSelectedNote(position);
-                    checkNoteChosen(position);
+                    onSelectedClassicNote(position);
+                    checkClassicNoteChosen(position);
                     invisibleNote();
                     txtNote.setText(Hawk.get(Key.NOTE, "Tap here to choose note"));
                 }
@@ -114,7 +143,177 @@ public class BeatFrag extends Fragment {
         }
     }
 
-    private void checkNoteChosen(int position) {
+    @SuppressLint("SetTextI18n")
+    private void selectedGuitarBass4String() {
+        setGuitarImages();
+        int width = WidthScreen() / 4;
+        itemNotes = new ArrayList<>();
+        clearList();
+        itemNotes.add(new ItemNote(getContext(), "E1", width, 0));
+        itemNotes.add(new ItemNote(getContext(), "A1", width, 1));
+        itemNotes.add(new ItemNote(getContext(), "D2", width, 2));
+        itemNotes.add(new ItemNote(getContext(), "G2", width, 3));
+        lnNote.removeAllViews();
+
+        if (!btnSwitch.isChecked()) {
+            txtNote.setText("Tap here to choose note");
+        }
+        for (int i = 0; i < itemNotes.size(); i++) {
+            final ItemNote itemNote = itemNotes.get(i);
+            itemNote.setOnClickItem(new ItemNote.IOnClickItem() {
+                @Override
+                public void onClickInterface(int position) {
+                    onSelectedClassicNote(position);
+                    checkBass4NoteChosen(position);
+                    invisibleNote();
+                    txtNote.setText(Hawk.get(Key.NOTE, "Tap here to choose note"));
+                }
+            });
+            lnNote.addView(itemNote);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void selectedGuitarBass5String() {
+        setGuitarImages();
+        int width = WidthScreen() / 5;
+        itemNotes = new ArrayList<>();
+        clearList();
+        itemNotes.add(new ItemNote(getContext(), "B0", width, 0));
+        itemNotes.add(new ItemNote(getContext(), "E1", width, 1));
+        itemNotes.add(new ItemNote(getContext(), "A1", width, 2));
+        itemNotes.add(new ItemNote(getContext(), "D2", width, 3));
+        itemNotes.add(new ItemNote(getContext(), "G2", width, 4));
+        lnNote.removeAllViews();
+
+        if (!btnSwitch.isChecked()) {
+            txtNote.setText("Tap here to choose note");
+        }
+        for (int i = 0; i < itemNotes.size(); i++) {
+            final ItemNote itemNote = itemNotes.get(i);
+            itemNote.setOnClickItem(new ItemNote.IOnClickItem() {
+                @Override
+                public void onClickInterface(int position) {
+                    onSelectedClassicNote(position);
+                    checkBass5NoteChosen(position);
+                    invisibleNote();
+                    txtNote.setText(Hawk.get(Key.NOTE, "Tap here to choose note"));
+                }
+            });
+            lnNote.addView(itemNote);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void selectedGuitarBass6String() {
+        setGuitarImages();
+        int width = WidthScreen() / 6;
+        itemNotes = new ArrayList<>();
+        clearList();
+        itemNotes.add(new ItemNote(getContext(), "B0", width, 0));
+        itemNotes.add(new ItemNote(getContext(), "E1", width, 1));
+        itemNotes.add(new ItemNote(getContext(), "A1", width, 2));
+        itemNotes.add(new ItemNote(getContext(), "D2", width, 3));
+        itemNotes.add(new ItemNote(getContext(), "G2", width, 4));
+        itemNotes.add(new ItemNote(getContext(), "C3", width, 5));
+        lnNote.removeAllViews();
+
+        if (!btnSwitch.isChecked()) {
+            txtNote.setText("Tap here to choose note");
+        }
+        for (int i = 0; i < itemNotes.size(); i++) {
+            final ItemNote itemNote = itemNotes.get(i);
+            itemNote.setOnClickItem(new ItemNote.IOnClickItem() {
+                @Override
+                public void onClickInterface(int position) {
+                    onSelectedClassicNote(position);
+                    checkBass6NoteChosen(position);
+                    invisibleNote();
+                    txtNote.setText(Hawk.get(Key.NOTE, "Tap here to choose note"));
+                }
+            });
+            lnNote.addView(itemNote);
+        }
+
+    }
+
+    private void setNone() {
+        Hawk.put(Key.NOTE, "none");
+    }
+
+    private void initData() {
+        int height = (HeightScreen() - dpToPx(144)) / 4;
+        itemGuitars = new ArrayList<>();
+        itemGuitars.add(new ItemGuitar(getContext(), R.drawable.classic, "Guitar Classic", R.drawable.img_checked, 0, height));
+        itemGuitars.add(new ItemGuitar(getContext(), R.drawable.bass_4, "Guitar Bass 4-String", R.drawable.img_checked, 1, height));
+        itemGuitars.add(new ItemGuitar(getContext(), R.drawable.bass_5, "Guitar Bass 5-String", R.drawable.img_checked, 2, height));
+        itemGuitars.add(new ItemGuitar(getContext(), R.drawable.bass_6, "Guitar Bass 6-String", R.drawable.img_checked, 3, height));
+
+        txtGuitar.setText(Hawk.get(Key.GUITAR_CHOOSEN, "Classic/Acoustic"));
+        for (int i = 0; i < itemGuitars.size(); i++) {
+            if (itemGuitars.get(i).getText().equals(Hawk.get(Key.GUITAR, "Guitar Classic"))) {
+                itemGuitars.get(i).guitarChoice(true);
+            }
+            final ItemGuitar itemGuitar = itemGuitars.get(i);
+            itemGuitar.setOnClickItem(new ItemGuitar.IOnClickItem() {
+                @Override
+                public void onClickInterface(int position) {
+                    onSelectedGuitar(position);
+                    invisibleGuitarList();
+                    checkGuitarChoosen(position);
+
+                    Hawk.put(Key.GUITAR, itemGuitars.get(position).getText());
+                    txtGuitar.setText(setGuitarText());
+                }
+            });
+            lnGuitar.addView(itemGuitar);
+        }
+    }
+
+    private void checkGuitarChoosen(int position) {
+        if (position == 0) {
+            selectedGuitarClassic();
+        }
+        if (position == 1) {
+            selectedGuitarBass4String();
+        }
+        if (position == 2) {
+            selectedGuitarBass5String();
+        }
+        if (position == 3) {
+            selectedGuitarBass6String();
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private String setGuitarText() {
+        if (Hawk.get(Key.GUITAR).equals("Guitar Classic")) {
+            Hawk.put(Key.GUITAR_CHOOSEN, "Classic/Acoustic");
+        }
+        if (Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Hawk.put(Key.GUITAR_CHOOSEN, "Bass 4-String");
+        }
+        if (Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Hawk.put(Key.GUITAR_CHOOSEN, "Bass 5-String");
+        }
+        if (Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Hawk.put(Key.GUITAR_CHOOSEN, "Bass 6-String");
+        }
+
+        return Hawk.get(Key.GUITAR_CHOOSEN, "Classic/Acoustic");
+    }
+
+    private void invisibleGuitarList() {
+        ViewAnimator.animate(lnGuitar).fadeOut().duration(500).start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lnGuitar.setVisibility(View.INVISIBLE);
+            }
+        }, 500);
+    }
+
+    private void checkClassicNoteChosen(int position) {
         switch (position) {
             case 0:
                 onClickE2();
@@ -138,6 +337,87 @@ public class BeatFrag extends Fragment {
 
             case 5:
                 onClickE4();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void checkBass4NoteChosen(int position) {
+        switch (position) {
+            case 0:
+                onClickE1();
+                break;
+
+            case 1:
+                onClickA1();
+                break;
+
+            case 2:
+                onClickD2();
+                break;
+
+            case 3:
+                onClickG2();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void checkBass5NoteChosen(int position) {
+        switch (position) {
+            case 0:
+                onClickB0();
+                break;
+
+            case 1:
+                onClickE1();
+                break;
+
+            case 2:
+                onClickA1();
+                break;
+
+            case 3:
+                onClickD2();
+                break;
+
+            case 4:
+                onClickG2();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void checkBass6NoteChosen(int position) {
+        switch (position) {
+            case 0:
+                onClickB0();
+                break;
+
+            case 1:
+                onClickE1();
+                break;
+
+            case 2:
+                onClickA1();
+                break;
+
+            case 3:
+                onClickD2();
+                break;
+
+            case 4:
+                onClickG2();
+                break;
+
+            case 5:
+                onClickC3();
                 break;
 
             default:
@@ -229,6 +509,161 @@ public class BeatFrag extends Fragment {
 
         setTextHz(pitchInHz);
 
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Classic")) {
+            handleGuitarClassicManual(pitchInHz);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 4-String")) {
+            handleGuitarBass4Manual(pitchInHz);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 5-String")) {
+            handleGuitarBass5Manual(pitchInHz);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 6-String")) {
+            handleGuitarBass6Manual(pitchInHz);
+        }
+
+    }
+
+    private void whenSwitchIsOn(float pitchInHz) {
+        setTextHz(pitchInHz);
+
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Classic")) {
+            handleGuitarClassicAuto(pitchInHz);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 4-String")) {
+            handleGuitarBass4Auto(pitchInHz);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 5-String")) {
+            handleGuitarBass5Auto(pitchInHz);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 6-String")) {
+            handleGuitarBass6Auto(pitchInHz);
+        }
+
+    }
+
+    private void handleGuitarBass4Auto(float pitchInHz) {
+        if (pitchInHz >= 41.13 && pitchInHz < 41.29) {
+            handleOn("E1");
+        } else if (pitchInHz >= 54.92 && pitchInHz < 55.08) {
+            handleOn("A1");
+        } else if (pitchInHz >= 73.34 && pitchInHz < 73.50) {
+            handleOn("D2");
+        } else if (pitchInHz >= 97.92 && pitchInHz <= 98.08) {
+            handleOn("G2");
+        }
+    }
+
+    private void handleGuitarBass5Auto(float pitchInHz) {
+        if (pitchInHz >= 30.79 && pitchInHz < 30.95) {
+            handleOn("B0");
+        } else if (pitchInHz >= 41.13 && pitchInHz < 41.29) {
+            handleOn("E1");
+        } else if (pitchInHz >= 54.92 && pitchInHz < 55.08) {
+            handleOn("A1");
+        } else if (pitchInHz >= 73.34 && pitchInHz < 73.50) {
+            handleOn("D2");
+        } else if (pitchInHz >= 97.92 && pitchInHz <= 98.08) {
+            handleOn("G2");
+        }
+    }
+
+    private void handleGuitarBass6Auto(float pitchInHz) {
+        if (pitchInHz >= 30.79 && pitchInHz < 30.95) {
+            handleOn("B0");
+        } else if (pitchInHz >= 41.13 && pitchInHz < 41.29) {
+            handleOn("E1");
+        } else if (pitchInHz >= 54.92 && pitchInHz < 55.08) {
+            handleOn("A1");
+        } else if (pitchInHz >= 73.34 && pitchInHz < 73.50) {
+            handleOn("D2");
+        } else if (pitchInHz >= 97.92 && pitchInHz <= 98.08) {
+            handleOn("G2");
+        } else if (pitchInHz >= 130.73 && pitchInHz <= 130.89) {
+            handleOn("C3");
+        }
+    }
+
+    private void handleGuitarClassicAuto(float pitchInHz) {
+        if (pitchInHz >= 82.33 && pitchInHz < 82.49) {
+            handleOn("E2");
+        } else if (pitchInHz >= 109.92 && pitchInHz < 110.08) {
+            handleOn("A2");
+        } else if (pitchInHz >= 146.75 && pitchInHz < 146.91) {
+            handleOn("D3");
+        } else if (pitchInHz >= 195.92 && pitchInHz <= 196.08) {
+            handleOn("G3");
+        } else if (pitchInHz >= 246.86 && pitchInHz < 247.02) {
+            handleOn("B3");
+        } else if (pitchInHz >= 329.55 && pitchInHz <= 329.71) {
+            handleOn("E4");
+        }
+    }
+
+    private void handleGuitarBass4Manual(float pitchInHz) {
+        if (Hawk.get(Key.NOTE).equals("E1")) {
+            handleE1(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("A1")) {
+            handleA1(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("D2")) {
+            handleD2(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("G2")) {
+            handleG2(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("none")) {
+            checkThread();
+        }
+    }
+
+    private void handleGuitarBass5Manual(float pitchInHz) {
+        if (Hawk.get(Key.NOTE).equals("B0")) {
+            handleB0(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("E1")) {
+            handleE1(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("A1")) {
+            handleA1(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("D2")) {
+            handleD2(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("G2")) {
+            handleG2(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("none")) {
+            checkThread();
+        }
+    }
+
+    private void handleGuitarBass6Manual(float pitchInHz) {
+        if (Hawk.get(Key.NOTE).equals("B0")) {
+            handleB0(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("E1")) {
+            handleE1(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("A1")) {
+            handleA1(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("D2")) {
+            handleD2(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("G2")) {
+            handleG2(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("C3")) {
+            handleC3(pitchInHz);
+        }
+        if (Hawk.get(Key.NOTE).equals("none")) {
+            checkThread();
+        }
+    }
+
+    private void handleGuitarClassicManual(float pitchInHz) {
         if (Hawk.get(Key.NOTE).equals("E2")) {
             handleE2(pitchInHz);
         }
@@ -247,26 +682,8 @@ public class BeatFrag extends Fragment {
         if (Hawk.get(Key.NOTE).equals("E4")) {
             handleE4(pitchInHz);
         }
-        if (Hawk.get(Key.NOTE).equals("none")){
+        if (Hawk.get(Key.NOTE).equals("none")) {
             checkThread();
-        }
-    }
-
-    private void whenSwitchIsOn(float pitchInHz) {
-        setTextHz(pitchInHz);
-
-        if (pitchInHz >= 82.33 && pitchInHz < 82.49) {
-            handleOn("E2");
-        } else if (pitchInHz >= 109.92 && pitchInHz < 110.08) {
-            handleOn("A2");
-        } else if (pitchInHz >= 146.75 && pitchInHz < 146.91) {
-            handleOn("D3");
-        } else if (pitchInHz >= 195.92 && pitchInHz <= 196.08) {
-            handleOn("G3");
-        } else if (pitchInHz >= 246.86 && pitchInHz < 247.02) {
-            handleOn("B3");
-        } else if (pitchInHz >= 329.55 && pitchInHz <= 329.71) {
-            handleOn("E4");
         }
     }
 
@@ -275,20 +692,65 @@ public class BeatFrag extends Fragment {
         txtNote.setText(noteName);
         ViewAnimator.animate(imgGuitar2).fadeIn().duration(500).start();
 
+        if (noteName.equals("E1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_e1_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("E1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_e1_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("E1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_e1_auto).into(imgGuitar2);
+        }
         if (noteName.equals("E2")) {
             Glide.with(getContext()).load(R.drawable.guitar_auto_e2).into(imgGuitar2);
+        }
+        if (noteName.equals("A1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_a1_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("A1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_a1_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("A1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_a1_auto).into(imgGuitar2);
         }
         if (noteName.equals("A2")) {
             Glide.with(getContext()).load(R.drawable.guitar_auto_a2).into(imgGuitar2);
         }
+        if (noteName.equals("D2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_d2_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("D2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_d2_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("D2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_d2_auto).into(imgGuitar2);
+        }
         if (noteName.equals("D3")) {
             Glide.with(getContext()).load(R.drawable.guitar_auto_d3).into(imgGuitar2);
+        }
+        if (noteName.equals("G2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_g2_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("G2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_g2_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("G2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_g2_auto).into(imgGuitar2);
         }
         if (noteName.equals("G3")) {
             Glide.with(getContext()).load(R.drawable.guitar_auto_g3).into(imgGuitar2);
         }
+        if (noteName.equals("B0") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_b0_auto).into(imgGuitar2);
+        }
+        if (noteName.equals("B0") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_b0_auto).into(imgGuitar2);
+        }
         if (noteName.equals("B3")) {
             Glide.with(getContext()).load(R.drawable.guitar_auto_b3).into(imgGuitar2);
+        }
+        if (noteName.equals("C3")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_c3_auto).into(imgGuitar2);
         }
         if (noteName.equals("E4")) {
             Glide.with(getContext()).load(R.drawable.guitar_auto_e4).into(imgGuitar2);
@@ -445,6 +907,156 @@ public class BeatFrag extends Fragment {
         }
     }
 
+    private void handleE1(float pitchInHz) {
+        if (pitchInHz > 0) {
+            if (pitchInHz >= 41.13 && pitchInHz <= 41.29) {
+                countingWork();
+            }
+            if (pitchInHz < 41.13) {
+                setIncompleteText(pitchInHz, 41);
+            }
+            if (pitchInHz > 41.29) {
+                setExcessiveText(pitchInHz, 41);
+            }
+            if (pitchInHz <= 25.13) {
+                setVisibility("low");
+                invisibleText();
+            }
+            if (pitchInHz >= 57.29) {
+                setVisibility("high");
+                invisibleText();
+            }
+        } else {
+            setVisibility("hideAll");
+            invisibleText();
+        }
+    }
+
+    private void handleA1(float pitchInHz) {
+        if (pitchInHz > 0) {
+            if (pitchInHz >= 54.92 && pitchInHz <= 55.08) {
+                countingWork();
+            }
+            if (pitchInHz < 54.92) {
+                setIncompleteText(pitchInHz, 54);
+            }
+            if (pitchInHz > 55.08) {
+                setExcessiveText(pitchInHz, 55);
+            }
+            if (pitchInHz <= 38.92) {
+                setVisibility("low");
+                invisibleText();
+            }
+            if (pitchInHz >= 71.08) {
+                setVisibility("high");
+                invisibleText();
+            }
+        } else {
+            setVisibility("hideAll");
+            invisibleText();
+        }
+    }
+
+    private void handleD2(float pitchInHz) {
+        if (pitchInHz > 0) {
+            if (pitchInHz >= 73.34 && pitchInHz <= 73.50) {
+                countingWork();
+            }
+            if (pitchInHz < 73.34) {
+                setIncompleteText(pitchInHz, 73);
+            }
+            if (pitchInHz > 73.50) {
+                setExcessiveText(pitchInHz, 73);
+            }
+            if (pitchInHz <= 57.34) {
+                setVisibility("low");
+                invisibleText();
+            }
+            if (pitchInHz >= 89.50) {
+                setVisibility("high");
+                invisibleText();
+            }
+        } else {
+            setVisibility("hideAll");
+            invisibleText();
+        }
+    }
+
+    private void handleG2(float pitchInHz) {
+        if (pitchInHz > 0) {
+            if (pitchInHz >= 97.92 && pitchInHz <= 98.08) {
+                countingWork();
+            }
+            if (pitchInHz < 97.92) {
+                setIncompleteText(pitchInHz, 97);
+            }
+            if (pitchInHz > 98.08) {
+                setExcessiveText(pitchInHz, 98);
+            }
+            if (pitchInHz <= 81.92) {
+                setVisibility("low");
+                invisibleText();
+            }
+            if (pitchInHz >= 114.08) {
+                setVisibility("high");
+                invisibleText();
+            }
+        } else {
+            setVisibility("hideAll");
+            invisibleText();
+        }
+    }
+
+    private void handleB0(float pitchInHz) {
+        if (pitchInHz > 0) {
+            if (pitchInHz >= 30.79 && pitchInHz <= 30.95) {
+                countingWork();
+            }
+            if (pitchInHz < 30.79) {
+                setIncompleteText(pitchInHz, 30);
+            }
+            if (pitchInHz > 30.95) {
+                setExcessiveText(pitchInHz, 31);
+            }
+            if (pitchInHz <= 14.79) {
+                setVisibility("low");
+                invisibleText();
+            }
+            if (pitchInHz >= 46.95) {
+                setVisibility("high");
+                invisibleText();
+            }
+        } else {
+            setVisibility("hideAll");
+            invisibleText();
+        }
+    }
+
+    private void handleC3(float pitchInHz) {
+        if (pitchInHz > 0) {
+            if (pitchInHz >= 130.73 && pitchInHz <= 130.89) {
+                countingWork();
+            }
+            if (pitchInHz < 130.73) {
+                setIncompleteText(pitchInHz, 130);
+            }
+            if (pitchInHz > 130.89) {
+                setExcessiveText(pitchInHz, 131);
+            }
+            if (pitchInHz <= 114.73) {
+                setVisibility("low");
+                invisibleText();
+            }
+            if (pitchInHz >= 146.89) {
+                setVisibility("high");
+                invisibleText();
+            }
+        } else {
+            setVisibility("hideAll");
+            invisibleText();
+        }
+    }
+
     private void countingWork() {
         invisibleText();
         checkTime();
@@ -510,6 +1122,22 @@ public class BeatFrag extends Fragment {
     private void onListener() {
         onClickBtnSwitch();
         onClickNoteText();
+        onClickGuitarText();
+    }
+
+    private void onClickGuitarText() {
+        txtGuitar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lnGuitar.setVisibility(View.VISIBLE);
+                        ViewAnimator.animate(lnGuitar).slideBottomIn().duration(500).start();
+                    }
+                }, 500);
+            }
+        });
     }
 
     private void onClickNoteText() {
@@ -550,6 +1178,36 @@ public class BeatFrag extends Fragment {
     private void onClickE2() {
         notesSound.play(NotesSound.TypeSound.E2);
         setImage("E2");
+    }
+
+    private void onClickB0() {
+        notesSound.play(NotesSound.TypeSound.B0);
+        setImage("B0");
+    }
+
+    private void onClickE1() {
+        notesSound.play(NotesSound.TypeSound.E1);
+        setImage("E1");
+    }
+
+    private void onClickA1() {
+        notesSound.play(NotesSound.TypeSound.A1);
+        setImage("A1");
+    }
+
+    private void onClickD2() {
+        notesSound.play(NotesSound.TypeSound.D2);
+        setImage("D2");
+    }
+
+    private void onClickG2() {
+        notesSound.play(NotesSound.TypeSound.G2);
+        setImage("G2");
+    }
+
+    private void onClickC3() {
+        notesSound.play(NotesSound.TypeSound.C3);
+        setImage("C3");
     }
 
     private void onClickBtnSwitch() {
@@ -607,7 +1265,22 @@ public class BeatFrag extends Fragment {
 
     private void animatorInvisibleView() {
         ViewAnimator.animate(imgGuitar2).fadeOut().duration(500).start();
-        Glide.with(getContext()).load(R.drawable.guitar_change).into(imgGuitar2);
+        checkGuitarTypeForSwitch();
+    }
+
+    private void checkGuitarTypeForSwitch() {
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Classic")) {
+            Glide.with(getContext()).load(R.drawable.guitar_change_classic).into(imgGuitar2);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_change_bass_4).into(imgGuitar2);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_change_bass_5).into(imgGuitar2);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_change_bass_6).into(imgGuitar2);
+        }
     }
 
     private void animatorVisibleView() {
@@ -627,25 +1300,70 @@ public class BeatFrag extends Fragment {
                 }
             }, 500);
         } else {
-            Glide.with(getContext()).load(R.drawable.guitar_change).into(imgGuitar2);
+            checkGuitarTypeForSwitch();
         }
     }
 
     private void setImage(String TYPE) {
+        if (TYPE.equals("E1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_e1_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("E1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_e1_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("E1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_e1_manual).into(imgGuitar2);
+        }
         if (TYPE.equals("E2")) {
             Glide.with(getContext()).load(R.drawable.guitar_e2).into(imgGuitar2);
         }
         if (TYPE.equals("E4")) {
             Glide.with(getContext()).load(R.drawable.guitar_e4).into(imgGuitar2);
         }
+        if (TYPE.equals("A1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_a1_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("A1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_a1_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("A1") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_a1_manual).into(imgGuitar2);
+        }
         if (TYPE.equals("A2")) {
             Glide.with(getContext()).load(R.drawable.guitar_a2).into(imgGuitar2);
+        }
+        if (TYPE.equals("B0") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_b0_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("B0") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_b0_manual).into(imgGuitar2);
         }
         if (TYPE.equals("B3")) {
             Glide.with(getContext()).load(R.drawable.guitar_b3).into(imgGuitar2);
         }
+        if (TYPE.equals("C3")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_c3_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("D2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_d2_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("D2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_d2_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("D2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_d2_manual).into(imgGuitar2);
+        }
         if (TYPE.equals("D3")) {
             Glide.with(getContext()).load(R.drawable.guitar_d3).into(imgGuitar2);
+        }
+        if (TYPE.equals("G2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_g2_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("G2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_g2_manual).into(imgGuitar2);
+        }
+        if (TYPE.equals("G2") && Hawk.get(Key.GUITAR).equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_g2_manual).into(imgGuitar2);
         }
         if (TYPE.equals("G3")) {
             Glide.with(getContext()).load(R.drawable.guitar_g3).into(imgGuitar2);
@@ -654,8 +1372,28 @@ public class BeatFrag extends Fragment {
 
     private void setImage() {
         Glide.with(getContext()).load(R.drawable.bg_1).into(imgBackground);
-        Glide.with(getContext()).load(R.drawable.guitar_auto_l).into(imgGuitar);
-        Glide.with(getContext()).load(R.drawable.guitar_change).into(imgGuitar2);
+        setGuitarImages();
+    }
+
+    private void setGuitarImages() {
+        Glide.with(getContext()).load(0).into(imgGuitar);
+        Glide.with(getContext()).load(0).into(imgGuitar2);
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Classic")) {
+            Glide.with(getContext()).load(R.drawable.guitar_auto_l).into(imgGuitar);
+            Glide.with(getContext()).load(R.drawable.guitar_change_classic).into(imgGuitar2);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 4-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_4_auto).into(imgGuitar);
+            Glide.with(getContext()).load(R.drawable.guitar_change_bass_4).into(imgGuitar2);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 5-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_5_auto).into(imgGuitar);
+            Glide.with(getContext()).load(R.drawable.guitar_change_bass_5).into(imgGuitar2);
+        }
+        if (Hawk.get(Key.GUITAR, "Guitar Classic").equals("Guitar Bass 6-String")) {
+            Glide.with(getContext()).load(R.drawable.guitar_bass_6_auto).into(imgGuitar);
+            Glide.with(getContext()).load(R.drawable.guitar_change_bass_6).into(imgGuitar2);
+        }
     }
 
     private void initView() {
@@ -670,10 +1408,12 @@ public class BeatFrag extends Fragment {
         txtTooLow = rootView.findViewById(R.id.txt_too_low);
         txtIncomplete = rootView.findViewById(R.id.txt_incomplete);
         txtExcessive = rootView.findViewById(R.id.txt_excessive);
+        txtGuitar = rootView.findViewById(R.id.txt_guitar_choosen);
 
         btnSwitch = rootView.findViewById(R.id.btn_switch);
 
         lnNote = rootView.findViewById(R.id.ln_note);
+        lnGuitar = rootView.findViewById(R.id.ln_guitar);
 
         notesSound = new NotesSound(getContext());
     }
@@ -684,15 +1424,28 @@ public class BeatFrag extends Fragment {
         return displayMetrics.widthPixels;
     }
 
+    private int HeightScreen() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
+    }
+
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
-    private void onSelectedNote(int position) {
+    private void onSelectedClassicNote(int position) {
         for (int i = 0; i < itemNotes.size(); i++) {
             itemNotes.get(i).noteChoice(false);
         }
         itemNotes.get(position).noteChoice(true);
+    }
+
+    private void onSelectedGuitar(int position) {
+        for (int i = 0; i < itemGuitars.size(); i++) {
+            itemGuitars.get(i).guitarChoice(false);
+        }
+        itemGuitars.get(position).guitarChoice(true);
     }
 
     @Override
